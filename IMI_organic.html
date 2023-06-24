@@ -5270,55 +5270,66 @@ postpartum sample</h2>
 
 # Built model
 
-IMI.week &lt;- glmer(data = df, IMI ~ as.factor(SampleOrder.overall)+(1|Site/CowId) ,family = binomial(link = &quot;logit&quot;))
-
-# Summary model
+IMI.week &lt;- glmer(data = df, IMI ~ as.factor(SampleOrder.overall) + Site + (1|CowId) ,family = binomial(link = &quot;logit&quot;))</code></pre>
+<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, :
+## Model failed to converge with max|grad| = 0.0229252 (tol = 0.002, component 1)</code></pre>
+<pre class="r"><code># Summary model
 
 summary(IMI.week)</code></pre>
 <pre><code>## Generalized linear mixed model fit by maximum likelihood (Laplace
 ##   Approximation) [glmerMod]
 ##  Family: binomial  ( logit )
-## Formula: IMI ~ as.factor(SampleOrder.overall) + (1 | Site/CowId)
+## Formula: IMI ~ as.factor(SampleOrder.overall) + Site + (1 | CowId)
 ##    Data: df
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##   2016.3   2054.3  -1001.2   2002.3     1666 
+##   1998.0   2052.3   -989.0   1978.0     1663 
 ## 
 ## Scaled residuals: 
 ##     Min      1Q  Median      3Q     Max 
-## -2.4815 -0.6492  0.2616  0.6082  1.6837 
+## -2.9758 -0.6551  0.1929  0.5965  1.7289 
 ## 
 ## Random effects:
-##  Groups     Name        Variance Std.Dev.
-##  CowId:Site (Intercept) 2.003    1.415   
-##  Site       (Intercept) 1.448    1.203   
-## Number of obs: 1673, groups:  CowId:Site, 424; Site, 5
+##  Groups Name        Variance Std.Dev.
+##  CowId  (Intercept) 2.051    1.432   
+## Number of obs: 1673, groups:  CowId, 424
 ## 
 ## Fixed effects:
-##                                 Estimate Std. Error z value Pr(&gt;|z|)  
-## (Intercept)                       0.9820     0.5619   1.748   0.0805 .
-## as.factor(SampleOrder.overall)2  -0.1752     0.1695  -1.034   0.3012  
-## as.factor(SampleOrder.overall)3   0.1267     0.1743   0.727   0.4674  
-## as.factor(SampleOrder.overall)4  -0.2482     0.1809  -1.372   0.1700  
-## as.factor(SampleOrder.overall)5  -0.1997     0.2349  -0.850   0.3952  
+##                                 Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)                      -0.5528     0.2091  -2.644 0.008193 ** 
+## as.factor(SampleOrder.overall)2  -0.1790     0.1760  -1.017 0.309239    
+## as.factor(SampleOrder.overall)3   0.1288     0.1805   0.714 0.475514    
+## as.factor(SampleOrder.overall)4  -0.2490     0.1870  -1.332 0.183000    
+## as.factor(SampleOrder.overall)5  -0.1974     0.2419  -0.816 0.414369    
+## SiteB                             1.3236     0.2585   5.121 3.04e-07 ***
+## SiteC                             1.0257     0.2574   3.984 6.77e-05 ***
+## SiteD                             1.6090     0.4862   3.309 0.000936 ***
+## SiteE                             3.8877     0.4645   8.369  &lt; 2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
-##             (Intr) a.(SO.)2 a.(SO.)3 a.(SO.)4
-## as.fc(SO.)2 -0.149                           
-## as.fc(SO.)3 -0.139  0.481                    
-## as.fc(SO.)4 -0.134  0.465    0.460           
-## as.fc(SO.)5 -0.097  0.360    0.357    0.359</code></pre>
+##             (Intr) a.(SO.)2 a.(SO.)3 a.(SO.)4 a.(SO.)5 SiteB  SiteC  SiteD 
+## as.fc(SO.)2 -0.394                                                         
+## as.fc(SO.)3 -0.387  0.482                                                  
+## as.fc(SO.)4 -0.349  0.468    0.461                                         
+## as.fc(SO.)5 -0.224  0.363    0.360    0.362                                
+## SiteB       -0.621 -0.024   -0.020   -0.058   -0.119                       
+## SiteC       -0.620 -0.022   -0.022   -0.053   -0.092    0.544              
+## SiteD       -0.343 -0.006    0.007    0.000    0.006    0.288  0.284       
+## SiteE       -0.380 -0.020    0.019   -0.002    0.002    0.339  0.327  0.186
+## optimizer (Nelder_Mead) convergence code: 0 (OK)
+## Model failed to converge with max|grad| = 0.0229252 (tol = 0.002, component 1)</code></pre>
 <pre class="r"><code># Type III p-values
 
 Anova(IMI.week,type = &quot;III&quot;)</code></pre>
 <pre><code>## Analysis of Deviance Table (Type III Wald chisquare tests)
 ## 
 ## Response: IMI
-##                                 Chisq Df Pr(&gt;Chisq)  
-## (Intercept)                    3.0549  1    0.08049 .
-## as.factor(SampleOrder.overall) 5.6247  4    0.22899  
+##                                  Chisq Df Pr(&gt;Chisq)    
+## (Intercept)                     6.9907  1   0.008193 ** 
+## as.factor(SampleOrder.overall)  5.3571  4   0.252576    
+## Site                           77.4508  4  6.037e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code># ICC
@@ -5326,66 +5337,77 @@ Anova(IMI.week,type = &quot;III&quot;)</code></pre>
 performance::icc(IMI.week,by_group = TRUE)</code></pre>
 <pre><code>## # ICC by Group
 ## 
-## Group      |   ICC
-## ------------------
-## CowId:Site | 0.297
-## Site       | 0.215</code></pre>
+## Group |   ICC
+## -------------
+## CowId | 0.384</code></pre>
 <pre class="r"><code># ---- Staph aureus ----
 
 # Built model
 
-aureus.week &lt;- glmer(data = df, `Staphylococcus aureus` ~ as.factor(SampleOrder.overall) + (1|Site/CowId) ,family = binomial(link = &quot;logit&quot;))</code></pre>
-<pre><code>## boundary (singular) fit: see help(&#39;isSingular&#39;)</code></pre>
+aureus.week &lt;- glmer(data = subset(df,df$Site!=&quot;D&quot;), `Staphylococcus aureus` ~ as.factor(SampleOrder.overall) + Site + (1|CowId) ,family = binomial(link = &quot;logit&quot;))</code></pre>
+<pre><code>## Warning in (function (fn, par, lower = rep.int(-Inf, n), upper = rep.int(Inf, :
+## failure to converge in 10000 evaluations</code></pre>
+<pre><code>## Warning in optwrap(optimizer, devfun, start, rho$lower, control = control, :
+## convergence code 4 from Nelder_Mead: failure to converge in 10000 evaluations</code></pre>
+<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, :
+## Model failed to converge with max|grad| = 0.016246 (tol = 0.002, component 1)</code></pre>
 <pre class="r"><code># Summary model
 
 summary(aureus.week)</code></pre>
 <pre><code>## Generalized linear mixed model fit by maximum likelihood (Laplace
 ##   Approximation) [glmerMod]
 ##  Family: binomial  ( logit )
-## Formula: `Staphylococcus aureus` ~ as.factor(SampleOrder.overall) + (1 |  
-##     Site/CowId)
-##    Data: df
+## Formula: `Staphylococcus aureus` ~ as.factor(SampleOrder.overall) + Site +  
+##     (1 | CowId)
+##    Data: subset(df, df$Site != &quot;D&quot;)
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##    618.4    656.4   -302.2    604.4     1666 
+##    615.9    664.4   -299.0    597.9     1597 
 ## 
 ## Scaled residuals: 
 ##      Min       1Q   Median       3Q      Max 
-## -2.10434 -0.00693 -0.00658 -0.00544  2.43032 
+## -2.06260 -0.00818 -0.00579 -0.00413  2.44491 
 ## 
 ## Random effects:
-##  Groups     Name        Variance  Std.Dev. 
-##  CowId:Site (Intercept) 2.166e+02 1.472e+01
-##  Site       (Intercept) 2.470e-10 1.572e-05
-## Number of obs: 1673, groups:  CowId:Site, 424; Site, 5
+##  Groups Name        Variance Std.Dev.
+##  CowId  (Intercept) 184      13.56   
+## Number of obs: 1606, groups:  CowId, 403
 ## 
 ## Fixed effects:
-##                                 Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)                     -9.90921    0.69744 -14.208   &lt;2e-16 ***
-## as.factor(SampleOrder.overall)2 -0.48475    0.48231  -1.005    0.315    
-## as.factor(SampleOrder.overall)3 -0.09384    0.48407  -0.194    0.846    
-## as.factor(SampleOrder.overall)4 -0.22807    0.50232  -0.454    0.650    
-## as.factor(SampleOrder.overall)5  0.02592    0.66455   0.039    0.969    
+##                                  Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)                     -10.08442    1.09250  -9.231   &lt;2e-16 ***
+## as.factor(SampleOrder.overall)2  -0.46772    0.47480  -0.985   0.3246    
+## as.factor(SampleOrder.overall)3  -0.06941    0.47890  -0.145   0.8848    
+## as.factor(SampleOrder.overall)4  -0.19501    0.49980  -0.390   0.6964    
+## as.factor(SampleOrder.overall)5   0.06957    0.66614   0.104   0.9168    
+## SiteB                             0.71867    1.17690   0.611   0.5414    
+## SiteC                            -0.68906    1.49690  -0.460   0.6453    
+## SiteE                             2.61488    1.33851   1.954   0.0508 .  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
-##             (Intr) a.(SO.)2 a.(SO.)3 a.(SO.)4
-## as.fc(SO.)2 -0.273                           
-## as.fc(SO.)3 -0.322  0.482                    
-## as.fc(SO.)4 -0.296  0.466    0.470           
-## as.fc(SO.)5 -0.261  0.347    0.354    0.350  
-## optimizer (Nelder_Mead) convergence code: 0 (OK)
-## boundary (singular) fit: see help(&#39;isSingular&#39;)</code></pre>
+##             (Intr) a.(SO.)2 a.(SO.)3 a.(SO.)4 a.(SO.)5 SiteB  SiteC 
+## as.fc(SO.)2 -0.162                                                  
+## as.fc(SO.)3 -0.192  0.478                                           
+## as.fc(SO.)4 -0.168  0.462    0.466                                  
+## as.fc(SO.)5 -0.118  0.342    0.350    0.348                         
+## SiteB       -0.680 -0.010   -0.014   -0.024   -0.081                
+## SiteC       -0.535 -0.007   -0.011   -0.019   -0.051    0.511       
+## SiteE       -0.588  0.014    0.027    0.034    0.015    0.567  0.446
+## optimizer (Nelder_Mead) convergence code: 4 (failure to converge in 10000 evaluations)
+## Model failed to converge with max|grad| = 0.016246 (tol = 0.002, component 1)
+## failure to converge in 10000 evaluations</code></pre>
 <pre class="r"><code># Type III p-values
 
 Anova(aureus.week,type = &quot;III&quot;)</code></pre>
 <pre><code>## Analysis of Deviance Table (Type III Wald chisquare tests)
 ## 
 ## Response: Staphylococcus aureus
-##                                   Chisq Df Pr(&gt;Chisq)    
-## (Intercept)                    201.8694  1     &lt;2e-16 ***
-## as.factor(SampleOrder.overall)   1.2644  4     0.8674    
+##                                  Chisq Df Pr(&gt;Chisq)    
+## (Intercept)                    85.2040  1     &lt;2e-16 ***
+## as.factor(SampleOrder.overall)  1.2791  4     0.8649    
+## Site                            6.0331  3     0.1100    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code># ICC
@@ -5393,16 +5415,16 @@ Anova(aureus.week,type = &quot;III&quot;)</code></pre>
 performance::icc(aureus.week,by_group = TRUE)</code></pre>
 <pre><code>## # ICC by Group
 ## 
-## Group      |       ICC
-## ----------------------
-## CowId:Site |     0.985
-## Site       | 1.123e-12</code></pre>
+## Group |   ICC
+## -------------
+## CowId | 0.982</code></pre>
 <pre class="r"><code># ---- Staph chromogenes ----
 
 # Built model
 
-s.chrom.week&lt;-glmer(data = df,`Staphylococcus chromogenes`~as.factor(SampleOrder.overall)+(1|Site/CowId),family = binomial(link = &quot;logit&quot;))</code></pre>
-<pre><code>## boundary (singular) fit: see help(&#39;isSingular&#39;)</code></pre>
+s.chrom.week&lt;-glmer(data = df,`Staphylococcus chromogenes`~as.factor(SampleOrder.overall) + Site + (1|CowId),family = binomial(link = &quot;logit&quot;))</code></pre>
+<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, :
+## Model failed to converge with max|grad| = 0.323579 (tol = 0.002, component 1)</code></pre>
 <pre class="r"><code># Summary model
 
 summary(s.chrom.week)</code></pre>
@@ -5410,40 +5432,47 @@ summary(s.chrom.week)</code></pre>
 ##   Approximation) [glmerMod]
 ##  Family: binomial  ( logit )
 ## Formula: `Staphylococcus chromogenes` ~ as.factor(SampleOrder.overall) +  
-##     (1 | Site/CowId)
+##     Site + (1 | CowId)
 ##    Data: df
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##   1359.7   1397.7   -672.9   1345.7     1666 
+##   1358.1   1412.3   -669.0   1338.1     1663 
 ## 
 ## Scaled residuals: 
 ##      Min       1Q   Median       3Q      Max 
-## -2.14597 -0.05617 -0.04419 -0.03882  2.58355 
+## -2.04003 -0.11295 -0.08140 -0.05292  2.71813 
 ## 
 ## Random effects:
-##  Groups     Name        Variance Std.Dev.
-##  CowId:Site (Intercept) 38.65    6.217   
-##  Site       (Intercept)  0.00    0.000   
-## Number of obs: 1673, groups:  CowId:Site, 424; Site, 5
+##  Groups Name        Variance Std.Dev.
+##  CowId  (Intercept) 19.06    4.366   
+## Number of obs: 1673, groups:  CowId, 424
 ## 
 ## Fixed effects:
 ##                                 Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)                     -5.38792    0.84548  -6.373 1.86e-10 ***
-## as.factor(SampleOrder.overall)2 -0.47986    0.27480  -1.746   0.0808 .  
-## as.factor(SampleOrder.overall)3 -0.07808    0.27353  -0.285   0.7753    
-## as.factor(SampleOrder.overall)4 -0.68383    0.30421  -2.248   0.0246 *  
-## as.factor(SampleOrder.overall)5 -0.42743    0.39158  -1.092   0.2750    
+## (Intercept)                     -3.94971    0.78352  -5.041 4.63e-07 ***
+## as.factor(SampleOrder.overall)2 -0.45969    0.25870  -1.777   0.0756 .  
+## as.factor(SampleOrder.overall)3 -0.08717    0.25895  -0.337   0.7364    
+## as.factor(SampleOrder.overall)4 -0.66564    0.28965  -2.298   0.0216 *  
+## as.factor(SampleOrder.overall)5 -0.38327    0.37496  -1.022   0.3067    
+## SiteB                            0.48954    0.66556   0.736   0.4620    
+## SiteC                           -0.87540    0.63016  -1.389   0.1648    
+## SiteD                            0.97444    1.23823   0.787   0.4313    
+## SiteE                            1.95455    0.93403   2.093   0.0364 *  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
-##             (Intr) a.(SO.)2 a.(SO.)3 a.(SO.)4
-## as.fc(SO.)2 -0.008                           
-## as.fc(SO.)3 -0.113  0.462                    
-## as.fc(SO.)4  0.001  0.437    0.434           
-## as.fc(SO.)5 -0.026  0.333    0.336    0.331  
+##             (Intr) a.(SO.)2 a.(SO.)3 a.(SO.)4 a.(SO.)5 SiteB  SiteC  SiteD 
+## as.fc(SO.)2 -0.036                                                         
+## as.fc(SO.)3 -0.105  0.462                                                  
+## as.fc(SO.)4 -0.007  0.431    0.432                                         
+## as.fc(SO.)5 -0.018  0.328    0.334    0.328                                
+## SiteB       -0.347 -0.015   -0.028   -0.036   -0.071                       
+## SiteC       -0.423 -0.017   -0.030   -0.035   -0.059    0.481              
+## SiteD       -0.253 -0.011   -0.001   -0.007   -0.001    0.241  0.258       
+## SiteE       -0.442 -0.036   -0.003   -0.022   -0.013    0.314  0.346  0.186
 ## optimizer (Nelder_Mead) convergence code: 0 (OK)
-## boundary (singular) fit: see help(&#39;isSingular&#39;)</code></pre>
+## Model failed to converge with max|grad| = 0.323579 (tol = 0.002, component 1)</code></pre>
 <pre class="r"><code># Type III p-values
 
 Anova(s.chrom.week,type = &quot;III&quot;)</code></pre>
@@ -5451,63 +5480,74 @@ Anova(s.chrom.week,type = &quot;III&quot;)</code></pre>
 ## 
 ## Response: Staphylococcus chromogenes
 ##                                  Chisq Df Pr(&gt;Chisq)    
-## (Intercept)                    40.6100  1  1.859e-10 ***
-## as.factor(SampleOrder.overall)  7.1655  4     0.1274    
+## (Intercept)                    25.4116  1  4.631e-07 ***
+## as.factor(SampleOrder.overall)  7.2981  4    0.12095    
+## Site                           11.3115  4    0.02328 *  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code># ICC
 
 performance::icc(s.chrom.week,by_group = TRUE)</code></pre>
-<pre><code>## Warning: Can&#39;t compute random effect variances. Some variance components equal
-##   zero. Your model may suffer from singularity (see `?lme4::isSingular`
-##   and `?performance::check_singularity`).
-##   Solution: Respecify random structure! You may also decrease the
-##   `tolerance` level to enforce the calculation of random effect variances.</code></pre>
-<pre><code>## [1] NA</code></pre>
+<pre><code>## # ICC by Group
+## 
+## Group |   ICC
+## -------------
+## CowId | 0.853</code></pre>
 <pre class="r"><code># ---- NAS non-chromogenes ----
 
 # Built model
 
-nas.non.chrom.week &lt;- glmer(data = df,nas.non.chrom~as.factor(SampleOrder.overall) + (1|Site/CowId),family = binomial(link = &quot;logit&quot;))
-
-# Summary model
+nas.non.chrom.week &lt;- glmer(data = df,nas.non.chrom~as.factor(SampleOrder.overall) + Site +  (1|CowId),family = binomial(link = &quot;logit&quot;))</code></pre>
+<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, :
+## Model failed to converge with max|grad| = 0.711704 (tol = 0.002, component 1)</code></pre>
+<pre class="r"><code># Summary model
 
 summary(nas.non.chrom.week)</code></pre>
 <pre><code>## Generalized linear mixed model fit by maximum likelihood (Laplace
 ##   Approximation) [glmerMod]
 ##  Family: binomial  ( logit )
-## Formula: nas.non.chrom ~ as.factor(SampleOrder.overall) + (1 | Site/CowId)
+## Formula: nas.non.chrom ~ as.factor(SampleOrder.overall) + Site + (1 |  
+##     CowId)
 ##    Data: df
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##    863.0    901.0   -424.5    849.0     1666 
+##    834.3    888.5   -407.1    814.3     1663 
 ## 
 ## Scaled residuals: 
 ##     Min      1Q  Median      3Q     Max 
-## -1.0894 -0.2614 -0.1812 -0.1518  3.6020 
+## -1.1402 -0.1933 -0.1157 -0.0956  4.0843 
 ## 
 ## Random effects:
-##  Groups     Name        Variance Std.Dev.
-##  CowId:Site (Intercept) 2.0364   1.4270  
-##  Site       (Intercept) 0.8774   0.9367  
-## Number of obs: 1673, groups:  CowId:Site, 424; Site, 5
+##  Groups Name        Variance Std.Dev.
+##  CowId  (Intercept) 3.053    1.747   
+## Number of obs: 1673, groups:  CowId, 424
 ## 
 ## Fixed effects:
 ##                                 Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)                      -3.2597     0.5149  -6.330 2.44e-10 ***
-## as.factor(SampleOrder.overall)2   0.5883     0.2867   2.052   0.0402 *  
-## as.factor(SampleOrder.overall)3   0.3370     0.3044   1.107   0.2684    
-## as.factor(SampleOrder.overall)4   0.1281     0.3355   0.382   0.7026    
-## as.factor(SampleOrder.overall)5   0.4812     0.4095   1.175   0.2400    
+## (Intercept)                      -4.5208     0.4635  -9.753  &lt; 2e-16 ***
+## as.factor(SampleOrder.overall)2   0.4578     0.2900   1.579  0.11439    
+## as.factor(SampleOrder.overall)3   0.2352     0.3080   0.764  0.44504    
+## as.factor(SampleOrder.overall)4   0.0197     0.3413   0.058  0.95398    
+## as.factor(SampleOrder.overall)5   0.3811     0.4178   0.912  0.36172    
+## SiteB                             1.2195     0.4193   2.909  0.00363 ** 
+## SiteC                            -0.3113     0.4813  -0.647  0.51772    
+## SiteD                             2.5833     0.6419   4.024 5.72e-05 ***
+## SiteE                             2.1940     0.5017   4.373 1.23e-05 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
-##             (Intr) a.(SO.)2 a.(SO.)3 a.(SO.)4
-## as.fc(SO.)2 -0.346                           
-## as.fc(SO.)3 -0.317  0.539                    
-## as.fc(SO.)4 -0.284  0.491    0.472           
-## as.fc(SO.)5 -0.234  0.408    0.394    0.376</code></pre>
+##             (Intr) a.(SO.)2 a.(SO.)3 a.(SO.)4 a.(SO.)5 SiteB  SiteC  SiteD 
+## as.fc(SO.)2 -0.401                                                         
+## as.fc(SO.)3 -0.361  0.521                                                  
+## as.fc(SO.)4 -0.317  0.472    0.456                                         
+## as.fc(SO.)5 -0.236  0.391    0.379    0.362                                
+## SiteB       -0.628  0.012   -0.008   -0.032   -0.112                       
+## SiteC       -0.466 -0.010   -0.021   -0.034   -0.089    0.556              
+## SiteD       -0.504  0.040    0.030    0.032    0.035    0.434  0.349       
+## SiteE       -0.601  0.044    0.050    0.055    0.039    0.546  0.449  0.385
+## optimizer (Nelder_Mead) convergence code: 0 (OK)
+## Model failed to converge with max|grad| = 0.711704 (tol = 0.002, component 1)</code></pre>
 <pre class="r"><code># Type III p-values
 
 Anova(nas.non.chrom.week,type = &quot;III&quot;)</code></pre>
@@ -5515,8 +5555,9 @@ Anova(nas.non.chrom.week,type = &quot;III&quot;)</code></pre>
 ## 
 ## Response: nas.non.chrom
 ##                                  Chisq Df Pr(&gt;Chisq)    
-## (Intercept)                    40.0743  1  2.445e-10 ***
-## as.factor(SampleOrder.overall)  5.0331  4     0.2839    
+## (Intercept)                    95.1257  1  &lt; 2.2e-16 ***
+## as.factor(SampleOrder.overall)  3.3572  4     0.4999    
+## Site                           39.8504  4  4.648e-08 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code># ICC
@@ -5524,93 +5565,102 @@ Anova(nas.non.chrom.week,type = &quot;III&quot;)</code></pre>
 performance::icc(nas.non.chrom.week,by_group = TRUE)</code></pre>
 <pre><code>## # ICC by Group
 ## 
-## Group      |   ICC
-## ------------------
-## CowId:Site | 0.328
-## Site       | 0.141</code></pre>
+## Group |   ICC
+## -------------
+## CowId | 0.481</code></pre>
 <pre class="r"><code># ---- Strep spp. ----
 
 # Built model
 
-strep.genus.week &lt;- glmer(data = df,strep.genus~as.factor(SampleOrder.overall) + (1|Site/CowId),family = binomial(link = &quot;logit&quot;))</code></pre>
-<pre><code>## boundary (singular) fit: see help(&#39;isSingular&#39;)</code></pre>
+strep.genus.week &lt;- glmer(data = df,strep.genus~as.factor(SampleOrder.overall) + Site +  (1|CowId),family = binomial(link = &quot;logit&quot;))</code></pre>
+<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, :
+## Model failed to converge with max|grad| = 1.47339 (tol = 0.002, component 1)</code></pre>
 <pre class="r"><code># Summary model
 
 summary(strep.genus.week)</code></pre>
 <pre><code>## Generalized linear mixed model fit by maximum likelihood (Laplace
 ##   Approximation) [glmerMod]
 ##  Family: binomial  ( logit )
-## Formula: strep.genus ~ as.factor(SampleOrder.overall) + (1 | Site/CowId)
+## Formula: strep.genus ~ as.factor(SampleOrder.overall) + Site + (1 | CowId)
 ##    Data: df
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##    625.1    663.0   -305.5    611.1     1666 
+##    619.1    673.3   -299.6    599.1     1663 
 ## 
 ## Scaled residuals: 
 ##     Min      1Q  Median      3Q     Max 
-## -3.7132 -0.0172 -0.0093 -0.0086  4.4818 
+## -3.1998 -0.0224 -0.0133 -0.0089  4.2979 
 ## 
 ## Random effects:
-##  Groups     Name        Variance  Std.Dev. 
-##  CowId:Site (Intercept) 8.825e+01 9.394e+00
-##  Site       (Intercept) 1.420e-09 3.768e-05
-## Number of obs: 1673, groups:  CowId:Site, 424; Site, 5
+##  Groups Name        Variance Std.Dev.
+##  CowId  (Intercept) 44.45    6.667   
+## Number of obs: 1673, groups:  CowId, 424
 ## 
 ## Fixed effects:
 ##                                 Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)                      -8.0735     0.6138 -13.154  &lt; 2e-16 ***
-## as.factor(SampleOrder.overall)2  -0.9304     0.4350  -2.139 0.032433 *  
-## as.factor(SampleOrder.overall)3  -1.2308     0.4556  -2.702 0.006899 ** 
-## as.factor(SampleOrder.overall)4  -1.3861     0.4966  -2.791 0.005255 ** 
-## as.factor(SampleOrder.overall)5  -2.5217     0.7171  -3.516 0.000438 ***
+## (Intercept)                      -7.5534     0.8139  -9.281  &lt; 2e-16 ***
+## as.factor(SampleOrder.overall)2  -0.7724     0.4103  -1.882  0.05977 .  
+## as.factor(SampleOrder.overall)3  -1.0355     0.4367  -2.371  0.01773 *  
+## as.factor(SampleOrder.overall)4  -1.2636     0.4827  -2.617  0.00886 ** 
+## as.factor(SampleOrder.overall)5  -2.1812     0.6891  -3.165  0.00155 ** 
+## SiteB                             0.9966     0.8790   1.134  0.25687    
+## SiteC                            -1.1117     1.2633  -0.880  0.37886    
+## SiteD                            -0.5782     2.1328  -0.271  0.78632    
+## SiteE                             3.6527     1.3246   2.758  0.00582 ** 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
-##             (Intr) a.(SO.)2 a.(SO.)3 a.(SO.)4
-## as.fc(SO.)2 -0.156                           
-## as.fc(SO.)3 -0.120  0.464                    
-## as.fc(SO.)4 -0.109  0.426    0.428           
-## as.fc(SO.)5 -0.037  0.313    0.320    0.323  
+##             (Intr) a.(SO.)2 a.(SO.)3 a.(SO.)4 a.(SO.)5 SiteB  SiteC  SiteD 
+## as.fc(SO.)2 -0.105                                                         
+## as.fc(SO.)3 -0.067  0.453                                                  
+## as.fc(SO.)4 -0.043  0.415    0.422                                         
+## as.fc(SO.)5  0.013  0.307    0.317    0.322                                
+## SiteB       -0.491  0.012    0.014    0.008   -0.001                       
+## SiteC       -0.290  0.024    0.029    0.028    0.026    0.481              
+## SiteD       -0.183  0.015    0.024    0.025    0.025    0.280  0.210       
+## SiteE       -0.192  0.040    0.061    0.070    0.066    0.500  0.391  0.224
 ## optimizer (Nelder_Mead) convergence code: 0 (OK)
-## boundary (singular) fit: see help(&#39;isSingular&#39;)</code></pre>
+## Model failed to converge with max|grad| = 1.47339 (tol = 0.002, component 1)</code></pre>
 <pre class="r"><code># Type III p-values
 
 Anova(strep.genus.week,type = &quot;III&quot;)</code></pre>
 <pre><code>## Analysis of Deviance Table (Type III Wald chisquare tests)
 ## 
 ## Response: strep.genus
-##                                  Chisq Df Pr(&gt;Chisq)    
-## (Intercept)                    173.036  1  &lt; 2.2e-16 ***
-## as.factor(SampleOrder.overall)  16.667  4   0.002243 ** 
+##                                 Chisq Df Pr(&gt;Chisq)    
+## (Intercept)                    86.134  1  &lt; 2.2e-16 ***
+## as.factor(SampleOrder.overall) 13.690  4   0.008354 ** 
+## Site                           12.915  4   0.011698 *  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<pre class="r"><code># Pairwise comparisons
+<pre class="r"><code># Adjusted means and multiple comparisons
 
 emmeans(strep.genus.week,pairwise~SampleOrder.overall,type=&quot;response&quot;)$contrasts</code></pre>
 <pre><code>##  contrast                                    odds.ratio    SE  df null z.ratio
-##  SampleOrder.overall1 / SampleOrder.overall2       2.54 1.103 Inf    1   2.139
-##  SampleOrder.overall1 / SampleOrder.overall3       3.42 1.560 Inf    1   2.702
-##  SampleOrder.overall1 / SampleOrder.overall4       4.00 1.986 Inf    1   2.791
-##  SampleOrder.overall1 / SampleOrder.overall5      12.45 8.928 Inf    1   3.516
-##  SampleOrder.overall2 / SampleOrder.overall3       1.35 0.623 Inf    1   0.651
-##  SampleOrder.overall2 / SampleOrder.overall4       1.58 0.791 Inf    1   0.908
-##  SampleOrder.overall2 / SampleOrder.overall5       4.91 3.500 Inf    1   2.232
-##  SampleOrder.overall3 / SampleOrder.overall4       1.17 0.596 Inf    1   0.304
-##  SampleOrder.overall3 / SampleOrder.overall5       3.64 2.603 Inf    1   1.803
-##  SampleOrder.overall4 / SampleOrder.overall5       3.11 2.268 Inf    1   1.559
+##  SampleOrder.overall1 / SampleOrder.overall2       2.16 0.888 Inf    1   1.882
+##  SampleOrder.overall1 / SampleOrder.overall3       2.82 1.230 Inf    1   2.371
+##  SampleOrder.overall1 / SampleOrder.overall4       3.54 1.708 Inf    1   2.617
+##  SampleOrder.overall1 / SampleOrder.overall5       8.86 6.103 Inf    1   3.165
+##  SampleOrder.overall2 / SampleOrder.overall3       1.30 0.577 Inf    1   0.593
+##  SampleOrder.overall2 / SampleOrder.overall4       1.63 0.795 Inf    1   1.009
+##  SampleOrder.overall2 / SampleOrder.overall5       4.09 2.803 Inf    1   2.056
+##  SampleOrder.overall3 / SampleOrder.overall4       1.26 0.623 Inf    1   0.460
+##  SampleOrder.overall3 / SampleOrder.overall5       3.14 2.166 Inf    1   1.663
+##  SampleOrder.overall4 / SampleOrder.overall5       2.50 1.759 Inf    1   1.306
 ##  p.value
-##   0.2035
-##   0.0537
-##   0.0419
-##   0.0040
-##   0.9665
-##   0.8938
-##   0.1677
-##   0.9981
-##   0.3716
-##   0.5241
+##   0.3267
+##   0.1232
+##   0.0672
+##   0.0134
+##   0.9761
+##   0.8512
+##   0.2394
+##   0.9908
+##   0.4569
+##   0.6874
 ## 
+## Results are averaged over the levels of: Site 
 ## P value adjustment: tukey method for comparing a family of 5 estimates 
 ## Tests are performed on the log odds ratio scale</code></pre>
 <pre class="r"><code># ICC
@@ -5618,54 +5668,63 @@ emmeans(strep.genus.week,pairwise~SampleOrder.overall,type=&quot;response&quot;)
 performance::icc(strep.genus.week,by_group = TRUE)</code></pre>
 <pre><code>## # ICC by Group
 ## 
-## Group      |       ICC
-## ----------------------
-## CowId:Site |     0.964
-## Site       | 1.551e-11</code></pre>
+## Group |   ICC
+## -------------
+## CowId | 0.931</code></pre>
 <pre class="r"><code># ---- Strep.-like organisms ----
 
 # Built model
 
-strep.like.week &lt;- glmer(data=df,strep.like~as.factor(SampleOrder.overall)+(1|Site/CowId),family = binomial(link = &quot;logit&quot;))
-
-# Summary model
+strep.like.week &lt;- glmer(data=df,strep.like~as.factor(SampleOrder.overall) + Site + (1|CowId),family = binomial(link = &quot;logit&quot;))</code></pre>
+<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, :
+## Model failed to converge with max|grad| = 0.336029 (tol = 0.002, component 1)</code></pre>
+<pre class="r"><code># Summary model
 
 summary(strep.like.week)</code></pre>
 <pre><code>## Generalized linear mixed model fit by maximum likelihood (Laplace
 ##   Approximation) [glmerMod]
 ##  Family: binomial  ( logit )
-## Formula: strep.like ~ as.factor(SampleOrder.overall) + (1 | Site/CowId)
+## Formula: strep.like ~ as.factor(SampleOrder.overall) + Site + (1 | CowId)
 ##    Data: df
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##    641.3    679.3   -313.7    627.3     1666 
+##    623.9    678.1   -301.9    603.9     1663 
 ## 
 ## Scaled residuals: 
 ##     Min      1Q  Median      3Q     Max 
-## -0.8521 -0.2553 -0.1376 -0.1215  7.2740 
+## -1.0612 -0.2019 -0.1019 -0.0847  7.7828 
 ## 
 ## Random effects:
-##  Groups     Name        Variance Std.Dev.
-##  CowId:Site (Intercept) 0.6512   0.807   
-##  Site       (Intercept) 1.3747   1.172   
-## Number of obs: 1673, groups:  CowId:Site, 424; Site, 5
+##  Groups Name        Variance Std.Dev.
+##  CowId  (Intercept) 1.392    1.18    
+## Number of obs: 1673, groups:  CowId, 424
 ## 
 ## Fixed effects:
 ##                                 Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)                     -3.07457    0.58023  -5.299 1.17e-07 ***
-## as.factor(SampleOrder.overall)2 -0.04447    0.29079  -0.153    0.878    
-## as.factor(SampleOrder.overall)3  0.06038    0.29244   0.206    0.836    
-## as.factor(SampleOrder.overall)4 -0.41246    0.34092  -1.210    0.226    
-## as.factor(SampleOrder.overall)5 -0.33027    0.45479  -0.726    0.468    
+## (Intercept)                     -4.51728    0.49793  -9.072  &lt; 2e-16 ***
+## as.factor(SampleOrder.overall)2 -0.07596    0.32356  -0.235   0.8144    
+## as.factor(SampleOrder.overall)3  0.04776    0.32510   0.147   0.8832    
+## as.factor(SampleOrder.overall)4 -0.51915    0.38667  -1.343   0.1794    
+## as.factor(SampleOrder.overall)5 -0.32586    0.50899  -0.640   0.5220    
+## SiteB                           -0.29782    0.57616  -0.517   0.6052    
+## SiteC                            1.96426    0.45335   4.333 1.47e-05 ***
+## SiteD                            3.22040    0.59096   5.449 5.05e-08 ***
+## SiteE                            1.35096    0.55934   2.415   0.0157 *  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
-##             (Intr) a.(SO.)2 a.(SO.)3 a.(SO.)4
-## as.fc(SO.)2 -0.238                           
-## as.fc(SO.)3 -0.238  0.479                    
-## as.fc(SO.)4 -0.193  0.412    0.415           
-## as.fc(SO.)5 -0.144  0.311    0.317    0.281</code></pre>
+##             (Intr) a.(SO.)2 a.(SO.)3 a.(SO.)4 a.(SO.)5 SiteB  SiteC  SiteD 
+## as.fc(SO.)2 -0.298                                                         
+## as.fc(SO.)3 -0.307  0.475                                                  
+## as.fc(SO.)4 -0.214  0.401    0.405                                         
+## as.fc(SO.)5 -0.148  0.306    0.313    0.274                                
+## SiteB       -0.529 -0.007   -0.019   -0.029   -0.096                       
+## SiteC       -0.746 -0.012   -0.020   -0.051   -0.096    0.619              
+## SiteD       -0.638 -0.002    0.013   -0.013    0.011    0.461  0.616       
+## SiteE       -0.587  0.004    0.020    0.021    0.012    0.495  0.631  0.487
+## optimizer (Nelder_Mead) convergence code: 0 (OK)
+## Model failed to converge with max|grad| = 0.336029 (tol = 0.002, component 1)</code></pre>
 <pre class="r"><code># Type III p-values
 
 Anova(strep.like.week,type = &quot;III&quot;)</code></pre>
@@ -5673,8 +5732,9 @@ Anova(strep.like.week,type = &quot;III&quot;)</code></pre>
 ## 
 ## Response: strep.like
 ##                                  Chisq Df Pr(&gt;Chisq)    
-## (Intercept)                    28.0778  1  1.165e-07 ***
-## as.factor(SampleOrder.overall)  2.4621  4     0.6514    
+## (Intercept)                    82.3023  1  &lt; 2.2e-16 ***
+## as.factor(SampleOrder.overall)  2.6102  4      0.625    
+## Site                           52.1242  4  1.299e-10 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code># ICC
@@ -5682,127 +5742,147 @@ Anova(strep.like.week,type = &quot;III&quot;)</code></pre>
 performance::icc(strep.like.week,by_group = TRUE)</code></pre>
 <pre><code>## # ICC by Group
 ## 
-## Group      |   ICC
-## ------------------
-## CowId:Site | 0.123
-## Site       | 0.259</code></pre>
+## Group |   ICC
+## -------------
+## CowId | 0.297</code></pre>
 <pre class="r"><code># ---- Gram-negative organisms ----
 
 # Built model
 
-gram.neg.week &lt;- glmer(data=df,gram.neg~as.factor(SampleOrder.overall) + (1|Site/CowId),family = binomial(link = &quot;logit&quot;))
-
-# Summary model
+gram.neg.week &lt;- glmer(data=df,gram.neg~as.factor(SampleOrder.overall) + Site +(1|CowId),family = binomial(link = &quot;logit&quot;))</code></pre>
+<pre><code>## boundary (singular) fit: see help(&#39;isSingular&#39;)</code></pre>
+<pre class="r"><code># Summary model
 
 summary(gram.neg.week)</code></pre>
 <pre><code>## Generalized linear mixed model fit by maximum likelihood (Laplace
 ##   Approximation) [glmerMod]
 ##  Family: binomial  ( logit )
-## Formula: gram.neg ~ as.factor(SampleOrder.overall) + (1 | Site/CowId)
+## Formula: gram.neg ~ as.factor(SampleOrder.overall) + Site + (1 | CowId)
 ##    Data: df
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##    373.3    411.2   -179.6    359.3     1666 
+##    370.0    424.3   -175.0    350.0     1663 
 ## 
 ## Scaled residuals: 
 ##     Min      1Q  Median      3Q     Max 
-## -0.2598 -0.1625 -0.1291 -0.1127  7.7686 
+## -0.2532 -0.1742 -0.1259 -0.0995 10.0477 
 ## 
 ## Random effects:
-##  Groups     Name        Variance Std.Dev.
-##  CowId:Site (Intercept) 0.2714   0.5210  
-##  Site       (Intercept) 0.3144   0.5607  
-## Number of obs: 1673, groups:  CowId:Site, 424; Site, 5
+##  Groups Name        Variance Std.Dev.
+##  CowId  (Intercept) 4e-14    2e-07   
+## Number of obs: 1673, groups:  CowId, 424
 ## 
 ## Fixed effects:
 ##                                 Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)                     -3.83181    0.69622  -5.504 3.72e-08 ***
-## as.factor(SampleOrder.overall)2 -0.15276    0.43798  -0.349    0.727    
-## as.factor(SampleOrder.overall)3 -0.08901    0.43884  -0.203    0.839    
-## as.factor(SampleOrder.overall)4 -0.67307    0.54300  -1.240    0.215    
-## as.factor(SampleOrder.overall)5 -0.93170    0.78005  -1.194    0.232    
+## (Intercept)                      -4.4588     0.5535  -8.055 7.95e-16 ***
+## as.factor(SampleOrder.overall)2  -0.1558     0.4369  -0.357  0.72129    
+## as.factor(SampleOrder.overall)3  -0.0967     0.4378  -0.221  0.82518    
+## as.factor(SampleOrder.overall)4  -0.6865     0.5420  -1.267  0.20525    
+## as.factor(SampleOrder.overall)5  -0.9803     0.7787  -1.259  0.20809    
+## SiteB                             0.4108     0.6328   0.649  0.51629    
+## SiteC                             1.7116     0.5482   3.123  0.00179 ** 
+## SiteD                             0.4258     1.1262   0.378  0.70537    
+## SiteE                             0.9643     0.7139   1.351  0.17678    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
-##             (Intr) a.(SO.)2 a.(SO.)3 a.(SO.)4
-## as.fc(SO.)2 -0.273                           
-## as.fc(SO.)3 -0.267  0.456                    
-## as.fc(SO.)4 -0.192  0.369    0.371           
-## as.fc(SO.)5 -0.150  0.258    0.261    0.215</code></pre>
+##             (Intr) a.(SO.)2 a.(SO.)3 a.(SO.)4 a.(SO.)5 SiteB  SiteC  SiteD 
+## as.fc(SO.)2 -0.352                                                         
+## as.fc(SO.)3 -0.344  0.456                                                  
+## as.fc(SO.)4 -0.265  0.369    0.371                                         
+## as.fc(SO.)5 -0.144  0.258    0.262    0.216                                
+## SiteB       -0.710 -0.009   -0.022   -0.034   -0.084                       
+## SiteC       -0.819 -0.012   -0.026   -0.041   -0.079    0.735              
+## SiteD       -0.406  0.000    0.003    0.006    0.007    0.354  0.408       
+## SiteE       -0.645  0.001    0.015    0.023    0.008    0.558  0.644  0.314
+## optimizer (Nelder_Mead) convergence code: 0 (OK)
+## boundary (singular) fit: see help(&#39;isSingular&#39;)</code></pre>
 <pre class="r"><code># Type III p-values
 
 Anova(gram.neg.week,type = &quot;III&quot;)</code></pre>
 <pre><code>## Analysis of Deviance Table (Type III Wald chisquare tests)
 ## 
 ## Response: gram.neg
-##                                  Chisq Df Pr(&gt;Chisq)    
-## (Intercept)                    30.2915  1  3.718e-08 ***
-## as.factor(SampleOrder.overall)  2.6903  4     0.6109    
+##                                 Chisq Df Pr(&gt;Chisq)    
+## (Intercept)                    64.882  1  7.951e-16 ***
+## as.factor(SampleOrder.overall)  2.881  4   0.577936    
+## Site                           16.440  4   0.002482 ** 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code># ICC
 
 performance::icc(gram.neg.week,by_group = TRUE)</code></pre>
-<pre><code>## # ICC by Group
-## 
-## Group      |   ICC
-## ------------------
-## CowId:Site | 0.070
-## Site       | 0.081</code></pre>
+<pre><code>## Warning: Can&#39;t compute random effect variances. Some variance components equal
+##   zero. Your model may suffer from singularity (see `?lme4::isSingular`
+##   and `?performance::check_singularity`).
+##   Solution: Respecify random structure! You may also decrease the
+##   `tolerance` level to enforce the calculation of random effect variances.</code></pre>
+<pre><code>## [1] NA</code></pre>
 <pre class="r"><code># ---- Other microorganisms ----
 
 # Built model
 
-other.week &lt;- glmer(data = df,other~as.factor(SampleOrder.overall) + (1|Site/CowId),family = binomial(link = &quot;logit&quot;))
-
-# Summary model
+other.week &lt;- glmer(data = df,other~as.factor(SampleOrder.overall) + Site + (1|CowId),family = binomial(link = &quot;logit&quot;))</code></pre>
+<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, :
+## Model failed to converge with max|grad| = 0.15341 (tol = 0.002, component 1)</code></pre>
+<pre class="r"><code># Summary model
 
 summary(other.week)</code></pre>
 <pre><code>## Generalized linear mixed model fit by maximum likelihood (Laplace
 ##   Approximation) [glmerMod]
 ##  Family: binomial  ( logit )
-## Formula: other ~ as.factor(SampleOrder.overall) + (1 | Site/CowId)
+## Formula: other ~ as.factor(SampleOrder.overall) + Site + (1 | CowId)
 ##    Data: df
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##   1120.1   1158.0   -553.0   1106.1     1666 
+##   1106.8   1161.0   -543.4   1086.8     1663 
 ## 
 ## Scaled residuals: 
 ##     Min      1Q  Median      3Q     Max 
-## -0.9728 -0.3164 -0.2517 -0.1964  4.8865 
+## -1.0296 -0.3023 -0.2222 -0.1672  5.1850 
 ## 
 ## Random effects:
-##  Groups     Name        Variance Std.Dev.
-##  CowId:Site (Intercept) 0.3868   0.6219  
-##  Site       (Intercept) 0.7363   0.8581  
-## Number of obs: 1673, groups:  CowId:Site, 424; Site, 5
+##  Groups Name        Variance Std.Dev.
+##  CowId  (Intercept) 0.5239   0.7238  
+## Number of obs: 1673, groups:  CowId, 424
 ## 
 ## Fixed effects:
 ##                                 Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)                      -2.8802     0.4409  -6.532 6.48e-11 ***
-## as.factor(SampleOrder.overall)2   0.2110     0.2353   0.897   0.3700    
-## as.factor(SampleOrder.overall)3   0.4781     0.2305   2.074   0.0381 *  
-## as.factor(SampleOrder.overall)4   0.3103     0.2424   1.280   0.2005    
-## as.factor(SampleOrder.overall)5   0.1983     0.2987   0.664   0.5069    
+## (Intercept)                      -3.7207     0.3313 -11.231   &lt;2e-16 ***
+## as.factor(SampleOrder.overall)2   0.1877     0.2458   0.764   0.4450    
+## as.factor(SampleOrder.overall)3   0.4492     0.2409   1.865   0.0622 .  
+## as.factor(SampleOrder.overall)4   0.2829     0.2529   1.119   0.2633    
+## as.factor(SampleOrder.overall)5   0.1555     0.3116   0.499   0.6177    
+## SiteB                             0.8004     0.3288   2.434   0.0149 *  
+## SiteC                             2.4299     0.3079   7.891    3e-15 ***
+## SiteD                             0.1680     0.6871   0.244   0.8068    
+## SiteE                             0.4934     0.4571   1.079   0.2804    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
-##             (Intr) a.(SO.)2 a.(SO.)3 a.(SO.)4
-## as.fc(SO.)2 -0.283                           
-## as.fc(SO.)3 -0.292  0.537                    
-## as.fc(SO.)4 -0.268  0.510    0.524           
-## as.fc(SO.)5 -0.205  0.415    0.427    0.413</code></pre>
+##             (Intr) a.(SO.)2 a.(SO.)3 a.(SO.)4 a.(SO.)5 SiteB  SiteC  SiteD 
+## as.fc(SO.)2 -0.393                                                         
+## as.fc(SO.)3 -0.411  0.533                                                  
+## as.fc(SO.)4 -0.373  0.508    0.521                                         
+## as.fc(SO.)5 -0.258  0.413    0.425    0.412                                
+## SiteB       -0.672 -0.006   -0.015   -0.033   -0.098                       
+## SiteC       -0.787  0.004    0.011   -0.015   -0.070    0.745              
+## SiteD       -0.321  0.000    0.001    0.004    0.006    0.330  0.347       
+## SiteE       -0.503  0.002    0.016    0.025    0.012    0.495  0.531  0.238
+## optimizer (Nelder_Mead) convergence code: 0 (OK)
+## Model failed to converge with max|grad| = 0.15341 (tol = 0.002, component 1)</code></pre>
 <pre class="r"><code># Type III p-values
 
 Anova(other.week,type=&quot;III&quot;)</code></pre>
 <pre><code>## Analysis of Deviance Table (Type III Wald chisquare tests)
 ## 
 ## Response: other
-##                                  Chisq Df Pr(&gt;Chisq)    
-## (Intercept)                    42.6712  1  6.476e-11 ***
-## as.factor(SampleOrder.overall)  4.5384  4      0.338    
+##                                   Chisq Df Pr(&gt;Chisq)    
+## (Intercept)                    126.1261  1     &lt;2e-16 ***
+## as.factor(SampleOrder.overall)   3.7299  4     0.4438    
+## Site                           100.6818  4     &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code># ICC
@@ -5810,10 +5890,9 @@ Anova(other.week,type=&quot;III&quot;)</code></pre>
 performance::icc(other.week,by_group = TRUE)</code></pre>
 <pre><code>## # ICC by Group
 ## 
-## Group      |   ICC
-## ------------------
-## CowId:Site | 0.088
-## Site       | 0.167</code></pre>
+## Group |   ICC
+## -------------
+## CowId | 0.137</code></pre>
 </div>
 <div id="period-prevalence-by-farm-1" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Period prevalence by
@@ -6180,7 +6259,7 @@ emmeans(strep.genus.farm,pairwise~Site,type = &quot;response&quot;)</code></pre>
 ## 
 ## P value adjustment: tukey method for comparing a family of 5 estimates 
 ## Tests are performed on the log odds ratio scale</code></pre>
-<pre class="r"><code># ---- Strep.-like organisms -----
+<pre class="r"><code># ---- Strep.-like organisms ----
 
 # Built model
 
@@ -6254,7 +6333,7 @@ emmeans(strep.like.farm,pairwise~Site,type = &quot;response&quot;)</code></pre>
 ## 
 ## P value adjustment: tukey method for comparing a family of 5 estimates 
 ## Tests are performed on the log odds ratio scale</code></pre>
-<pre class="r"><code># Gram-negative organisms
+<pre class="r"><code># ---- Gram-negative organisms ----
 
 gram.neg.farm &lt;- glm(data=df.per.cow,gram.neg.IMI.cow~Site,family = binomial(link = &quot;logit&quot;))
 
